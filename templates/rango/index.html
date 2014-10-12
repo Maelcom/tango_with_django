@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 
-{% load static %}
-
 <html>
 
     <head>
@@ -9,10 +7,29 @@
     </head>
 
     <body>
-        <h1>Rango says...</h1>
-        hello world! <strong>{{ boldmessage }}</strong><br />
+        {% if categories %}
+            <h1>There are {{ categories|length }} categories:</h1>
+            <ul>
+                {% for category in categories %}
+                    <li><a href="/rango/category/{{ category.url }}">{{ category.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h1>There are no categories present.</h1>
+        {% endif %}
+
+        {% if pages %}
+            <h1>Top 5 viewed pages:</h1>
+            <ul>
+                {% for page in pages %}
+                    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+
+
         <a href="/rango/about/">About</a><br />
-        <img src="{% static "army.png" %}" alt="Army of Darkness picture" />
     </body>
 
 </html>
