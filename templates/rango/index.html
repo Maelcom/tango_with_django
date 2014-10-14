@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+{% load static %}
+
 <html>
 
     <head>
@@ -7,6 +9,12 @@
     </head>
 
     <body>
+        {% if user.is_authenticated %}
+            <h1>Hello, {{ user.username }}!</h1>
+        {% else %}
+            <h1>Привет, <a href="/rango/login/">%username%</a>! Мы скучали по тебе.</h1>
+        {% endif %}
+
         {% if categories %}
             <h1>There are {{ categories|length }} categories:</h1>
             <ul>
@@ -32,6 +40,9 @@
 
 
         <a href="/rango/about/">About</a><br />
+        <a href="/rango/login/">Login</a><br />
+        <a href="/rango/register/">Register</a><br />
+        <img src="{% static "army.png" %}" alt="Army of Darkness" />
     </body>
 
 </html>
