@@ -1,5 +1,5 @@
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from rango.models import Category, Page
@@ -7,7 +7,6 @@ from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 
 
 def index(request):
-    context = RequestContext(request)
     category_list = Category.objects.order_by('-likes')[:5]
     top_pages_list = Page.objects.order_by('-views')[:5]
 
@@ -16,17 +15,15 @@ def index(request):
 
     context_dict = {'categories': category_list,
                     'pages': top_pages_list,}
-    return render_to_response('rango/index.html', context_dict, context)
+    return render(request, 'rango/index.html', context_dict)
 
 
 def about(request):
-    context = RequestContext(request)
     context_dict = {'file_name': "Vdul.jpg"}
-    return render_to_response('rango/about.html', context_dict, context)
+    return render(request, 'rango/about.html', context_dict)
 
 
 def category_view(request, category_name_url):
-    context = RequestContext(request)
     category_name = decode_url(category_name_url)
     context_dict = {'category_name': category_name,
                     'category_name_url': category_name_url}
@@ -39,12 +36,10 @@ def category_view(request, category_name_url):
     except Category.DoesNotExist:
         pass
 
-    return render_to_response('rango/category.html', context_dict, context)
+    return render(request, 'rango/category.html', context_dict)
 
 
 def add_category(request):
-    context = RequestContext(request)
-
     if request.method == 'POST':
         form = CategoryForm(request.POST)
 
@@ -56,11 +51,10 @@ def add_category(request):
     else:
         form = CategoryForm()
 
-    return render_to_response('rango/add_category.html', {'form': form}, context)
+    return render(request, 'rango/add_category.html', {'form': form})
 
 
 def add_page(request, category_name_url):
-    context = RequestContext(request)
     category_name = decode_url(category_name_url)
 
     if request.method == 'POST':
@@ -71,7 +65,7 @@ def add_page(request, category_name_url):
             try:
                 page.category = Category.objects.get(name=category_name)
             except Category.DoesNotExist:
-                return render_to_response('rango/add_category.html', {}, context)
+                return render(request, 'rango/add_category.html', {})
 
             page.save()
 
@@ -81,15 +75,13 @@ def add_page(request, category_name_url):
     else:
         form = PageForm()
 
-    return render_to_response('rango/add_page.html',
+    return render(request, 'rango/add_page.html',
                               {'category_name_url': category_name_url,
                                'category_name': category_name,
-                               'form': form},
-                              context)
+                               'form': form})
 
 
 def register(request):
-    context = RequestContext(request)
     registered = False
 
     if request.method == 'POST':
@@ -116,16 +108,13 @@ def register(request):
         user_form = UserForm()
         profile_form = UserProfileForm()
 
-    return render_to_response('rango/register.html',
+    return render(request, 'rango/register.html',
                               {'user_form': user_form,
                                'profile_form': profile_form,
-                               'registered': registered},
-                              context)
+                               'registered': registered})
 
 
 def user_login(request):
-    context = RequestContext(request)
-
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -142,7 +131,7 @@ def user_login(request):
             print "Invalid login details: {0}, {1}".format(username, password)
             return HttpResponse("Invalid login details supplied.")
     else:
-        return render_to_response('rango/login.html', {}, context)
+        return render(request, 'rango/login.html', {})
 
 
 def encode_url(name):
