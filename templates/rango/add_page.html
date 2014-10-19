@@ -1,11 +1,8 @@
-<!DOCTYPE html>
+{% extends 'rango/base.html' %}
 
-<html>
-<head>
-    <title>Rango</title>
-</head>
+{% block title %}Rango Add page{% endblock %}
 
-<body>
+{% block body_block %}
     <h1>Add a new Page</h1>
     <form novalidate id="page_form" method="post" action="/rango/category/{{ category_name_url }}/add_page/">
         {% csrf_token %}
@@ -21,5 +18,4 @@
 
         <input type="submit" name="submit" value="Create Page" />
     </form>
-</body>
-</html>
+{% endblock %}

@@ -142,7 +142,7 @@ def user_logout(request):
 
 @login_required
 def restricted(request):
-    return HttpResponse("Granted access to restricted part.")
+    return render(request, 'rango/restricted.html')
 
 
 def encode_url(name):
