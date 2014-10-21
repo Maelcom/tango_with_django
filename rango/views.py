@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
@@ -7,7 +7,7 @@ from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 
 
 def index(request):
-    category_list = Category.objects.order_by('-likes')[:5]
+    category_list = Category.objects.order_by('-likes')
     top_pages_list = Page.objects.order_by('-views')[:5]
 
     for category in category_list:
@@ -45,7 +45,7 @@ def add_category(request):
 
         if form.is_valid():
             form.save()
-            return index(request)
+            return redirect('category', category_name_url=encode_url(form.cleaned_data.get('name')))
         else:
             print form.errors
     else:
@@ -69,7 +69,7 @@ def add_page(request, category_name_url):
 
             page.save()
 
-            return category_view(request, category_name_url)
+            return redirect('category', category_name_url)
         else:
             print form.errors
     else:
