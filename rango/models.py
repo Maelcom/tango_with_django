@@ -1,9 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from utils.queryset import GetOrNoneManager
 
 
-class Category(models.Model):
+class BaseModel(models.Model):
+    objects = GetOrNoneManager()
+
+    class Meta:
+        abstract = True
+
+
+class Category(BaseModel):
     name = models.CharField(max_length=128, unique=True)
     views = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
@@ -17,7 +25,7 @@ class Category(models.Model):
         return self.name
 
 
-class Page(models.Model):
+class Page(BaseModel):
     category = models.ForeignKey(Category)
     title = models.CharField(max_length=128)
     url = models.URLField()
@@ -27,7 +35,7 @@ class Page(models.Model):
         return self.title
 
 
-class UserProfile(models.Model):
+class UserProfile(BaseModel):
     user = models.OneToOneField(User)
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)

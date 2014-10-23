@@ -69,18 +69,17 @@ def add_category(request):
 
 @login_required
 def add_page(request, category_name_slug):
+    cat = Category.objects.get_or_none(slug=category_name_slug)
+    if not cat:
+        return redirect('category', category_name_slug)
+
     if request.method == 'POST':
         form = PageForm(request.POST)
 
         if form.is_valid():
             page = form.save(commit=False)
-            try:
-                page.category = Category.objects.get(slug=category_name_slug)
-            except Category.DoesNotExist:
-                return render(request, 'rango/add_category.html', {})
-
+            page.category = cat
             page.save()
-
             return redirect('category', category_name_slug)
         else:
             print form.errors
