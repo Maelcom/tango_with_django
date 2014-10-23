@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -10,31 +11,44 @@ def index(request):
     category_list = Category.objects.order_by('-likes')
     top_pages_list = Page.objects.order_by('-views')[:5]
 
-    for category in category_list:
-        category.url = encode_url(category.name)
-
     context_dict = {'categories': category_list,
-                    'pages': top_pages_list,}
-    return render(request, 'rango/index.html', context_dict)
+                    'pages': top_pages_list, }
+
+    response = render(request, 'rango/index.html', context_dict)
+
+    # Session-based data below
+    visits = request.session.get('visits', 0)
+    last_visit = request.session.get('last_visit')
+
+    if last_visit:
+        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+
+        if (datetime.now() - last_visit_time).seconds > 5:
+            request.session['visits'] = visits + 1
+            request.session['last_visit'] = str(datetime.now())
+    else:
+        request.session['visits'] = visits + 1
+        request.session['last_visit'] = str(datetime.now())
+
+    return response
 
 
 def about(request):
-    context_dict = {'file_name': "Vdul.jpg"}
+    context_dict = {'file_name': "Vdul.jpg",
+                    'visits': request.session.get('visits', 0)}
     return render(request, 'rango/about.html', context_dict)
 
 
-def category_view(request, category_name_url):
-    category_name = decode_url(category_name_url)
-    context_dict = {'category_name': category_name,
-                    'category_name_url': category_name_url}
-
+def category_view(request, category_name_slug):
+    context_dict = {}
     try:
-        category = Category.objects.get(name=category_name)
+        category = Category.objects.get(slug=category_name_slug)
+        context_dict['category_name'] = category.name
         pages = Page.objects.filter(category=category)
         context_dict['category'] = category
         context_dict['pages'] = pages
     except Category.DoesNotExist:
-        pass
+        context_dict['category_name'] = category_name_slug.replace('-', ' ').title()
 
     return render(request, 'rango/category.html', context_dict)
 
@@ -44,8 +58,8 @@ def add_category(request):
         form = CategoryForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect('category', category_name_url=encode_url(form.cleaned_data.get('name')))
+            cat = form.save()
+            return redirect('category', cat.slug)
         else:
             print form.errors
     else:
@@ -54,36 +68,31 @@ def add_category(request):
     return render(request, 'rango/add_category.html', {'form': form})
 
 @login_required
-def add_page(request, category_name_url):
-    category_name = decode_url(category_name_url)
-
+def add_page(request, category_name_slug):
     if request.method == 'POST':
         form = PageForm(request.POST)
 
         if form.is_valid():
             page = form.save(commit=False)
             try:
-                page.category = Category.objects.get(name=category_name)
+                page.category = Category.objects.get(slug=category_name_slug)
             except Category.DoesNotExist:
                 return render(request, 'rango/add_category.html', {})
 
             page.save()
 
-            return redirect('category', category_name_url)
+            return redirect('category', category_name_slug)
         else:
             print form.errors
     else:
         form = PageForm()
 
     return render(request, 'rango/add_page.html',
-                              {'category_name_url': category_name_url,
-                               'category_name': category_name,
-                               'form': form})
+                  {'category_name_slug': category_name_slug,
+                   'form': form})
 
 
 def register(request):
-    registered = False
-
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
@@ -101,7 +110,12 @@ def register(request):
                 profile.picture = request.FILES['picture']
 
             profile.save()
-            registered = True
+
+            # Auto-login the new user
+            user = authenticate(username=user_form.cleaned_data['username'],
+                                password=user_form.cleaned_data['password'])
+            login(request, user)
+            return redirect('index')
         else:
             print user_form.errors, profile_form.errors
     else:
@@ -110,8 +124,7 @@ def register(request):
 
     return render(request, 'rango/register.html',
                               {'user_form': user_form,
-                               'profile_form': profile_form,
-                               'registered': registered})
+                               'profile_form': profile_form,})
 
 
 def user_login(request):
@@ -143,11 +156,3 @@ def user_logout(request):
 @login_required
 def restricted(request):
     return render(request, 'rango/restricted.html')
-
-
-def encode_url(name):
-    return name.replace(' ', '_')
-
-
-def decode_url(url):
-    return url.replace('_', ' ')

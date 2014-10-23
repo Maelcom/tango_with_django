@@ -5,17 +5,16 @@
 {% block body_block %}
     <h1>Register with Rango</h1>
 
-    {% if registered %}
-    Rango says: <strong>thank you for registering!</strong>
-    <a href="/rango/">Return to homepage</a>
+    {% if user.is_authenticated %}
+        Rango says: <strong>thank you for registering!</strong>
+        <a href="/rango/">Return to homepage</a>
     {% else %}
-    <form novalidate id="user_form" method="post" action="/rango/register/"
-            enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ user_form.as_p }}
-        {{ profile_form.as_p }}
+        <form novalidate id="user_form" method="post" action="/rango/register/" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            {{ profile_form.as_p }}
 
-        <input type="submit" name="submit" value="Register" />
-    </form>
+            <input type="submit" name="submit" value="Register" />
+        </form>
     {% endif %}
 {% endblock %}
