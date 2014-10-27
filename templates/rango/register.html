@@ -7,7 +7,7 @@
 
     {% if user.is_authenticated %}
         Rango says: <strong>thank you for registering!</strong>
-        <a href="/rango/">Return to homepage</a>
+        <a href="{% url 'index' %}">Return to homepage</a>
     {% else %}
         <form novalidate id="user_form" method="post" action="/rango/register/" enctype="multipart/form-data">
             {% csrf_token %}

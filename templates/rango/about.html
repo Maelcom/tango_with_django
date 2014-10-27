@@ -4,12 +4,13 @@
 
 {% block body_block %}
 <h1>Rango Says: Here is the about page.</h1>
-Go back to <a href="/rango">"Rango"</a> page.
+Go back to <a href="{% url 'index' %}">"Rango"</a> page.
 
 {% if visits %}
     <p>You've visited the index page {{ visits }} times!</p>
 {% else %}
-    <p>You never visited the index page. <a href="/rango">Go fix this!</a></p>
+    <p>You never visited the index page. <a href="{% url 'index' %}">Go fix
+        this!</a></p>
 {% endif %}
 
 <p>Here is a pic for <strong>About</strong> page.</p>
