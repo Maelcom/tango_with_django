@@ -31,7 +31,7 @@ def index(request):
 
 
 def about(request):
-    context_dict = {'file_name': "Vdul.jpg",
+    context_dict = {'file_name': "img/Vdul.jpg",
                     'visits': request.session.get('visits', 0)}
     return render(request, 'rango/about.html', context_dict)
 
