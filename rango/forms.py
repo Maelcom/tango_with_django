@@ -20,12 +20,14 @@ class PageForm(forms.ModelForm):
         fields = ('title', 'url')
 
 
-class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
+# Decomission of handmade login and register
+# Switched to django-registration-redux
+# class UserForm(forms.ModelForm):
+#     password = forms.CharField(widget=forms.PasswordInput())
+#
+#     class Meta:
+#         model = User
+#         fields = ('username', 'email', 'password')
 
 
 class UserProfileForm(forms.ModelForm):

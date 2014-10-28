@@ -1,4 +1,4 @@
-{% extends 'rango/base.html' %}
+{% extends 'base.html' %}
 
 {% load staticfiles %}
 
@@ -8,7 +8,8 @@
     {% if user.is_authenticated %}
         <h1>Hello, {{ user.username }}!</h1>
     {% else %}
-        <h1>Привет, <a href="{% url 'login' %}">%username%</a>! Мы скучали по
+        <h1>Привет, <a href="{% url 'auth_login' %}">%username%</a>! Мы
+            скучали по
             тебе.</h1>
     {% endif %}
 
