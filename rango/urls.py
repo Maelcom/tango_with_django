@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, url
+from django.contrib.auth.views import password_change
 from rango import views
 
 urlpatterns = patterns('',
@@ -13,4 +14,6 @@ urlpatterns = patterns('',
         # url(r'^login/$', views.user_login, name='login'),
         url(r'^logout/$', views.user_logout, name='logout'),
         url(r'^restricted/$', views.restricted, name='restricted'),
+        url(r'^change/$', password_change, {'post_change_redirect': 'index'},
+            name='change'),
 )

@@ -11,6 +11,7 @@
         <a href="{% url 'restricted' %}">Restricted</a>
         <a href="{% url 'add_category' %}">Add Category</a>
         <a href="{% url 'auth_logout' %}?next=/rango">Logout</a>
+        <a href="{% url 'change' %}">Change password</a>
     {% else %}
         <a href="{% url 'auth_login' %}">Login</a>
         <a href="{% url 'registration_register' %}">Register</a>
