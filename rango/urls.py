@@ -14,6 +14,6 @@ urlpatterns = patterns('',
         # url(r'^login/$', views.user_login, name='login'),
         url(r'^logout/$', views.user_logout, name='logout'),
         url(r'^restricted/$', views.restricted, name='restricted'),
-        url(r'^change/$', password_change, {'post_change_redirect': 'index'},
-            name='change'),
+        url(r'^change/$', password_change, {'post_change_redirect': 'index'}, name='change'),
+        url(r'^search/$', views.search, name='search'),
 )

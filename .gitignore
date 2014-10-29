@@ -58,3 +58,6 @@ target/
 
 # Sqlite DB
 *.sqlite3
+
+# File with API keys
+apikeys.py
