@@ -5,14 +5,18 @@
 {% block title %}Rango index{% endblock %}
 
 {% block body_block %}
+
+<div class="page-header hero-unit">
     {% if user.is_authenticated %}
         <h1>Hello, {{ user.username }}!</h1>
     {% else %}
-        <h1>Привет, <a href="{% url 'auth_login' %}">%username%</a>! Мы
-            скучали по
-            тебе.</h1>
+        <h1>Привет, <a href="{% url 'auth_login' %}">%username%</a>! Мы скучали
+            по тебе.</h1>
     {% endif %}
+</div>
 
+<div class="row placeholders">
+    <div class="col-xs-12 col-sm-6 placeholder">
     {% if categories %}
         <h1>There are {{ categories|length }} categories:</h1>
         <ul>
@@ -24,11 +28,12 @@
     {% else %}
         <h1>There are no categories present.</h1>
     {% endif %}
-
     {% if user.is_authenticated %}
     <a href="{% url 'add_category' %}">Add a new Category</a>
     {% endif %}
+    </div>
 
+    <div class="col-xs-12 col-sm-6 placeholder">
     {% if pages %}
         <h1>Top 5 viewed pages:</h1>
         <ul>
@@ -37,6 +42,10 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <img src="{% static "img/army.png" %}" alt="Army of Darkness" />
+    </div>
+</div>
+
+<img src="{% static "img/army.png" %}" class="img-responsive"
+     alt="Army of Darkness" />
 {% endblock %}
 

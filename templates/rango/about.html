@@ -2,8 +2,10 @@
 
 {% load staticfiles %}
 
+{% block title %}About{% endblock %}
+
 {% block body_block %}
-<h1>Rango Says: Here is the about page.</h1>
+<div class="page-header"><h1>About Rango</h1></div>
 Go back to <a href="{% url 'index' %}">"Rango"</a> page.
 
 {% if visits %}
