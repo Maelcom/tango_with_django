@@ -40,8 +40,5 @@ def run_query(search_terms):
             })
     except urllib2.URLError, e:
         print "Error when quetying Bing API:", e
-        print search_url
-
-    print results
 
     return results

@@ -34,3 +34,12 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture')
+
+
+class MailerForm(forms.Form):
+    login = forms.EmailField(max_length=50, widget=forms.EmailInput(attrs={'placeholder': 'From:'}))
+    to = forms.EmailField(max_length=50, widget=forms.EmailInput(attrs={'placeholder': 'To:'}))
+    pwd = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Your email password'}))
+
+    class Meta:
+        fields = ('login', 'to', 'pwd')

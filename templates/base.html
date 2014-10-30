@@ -32,6 +32,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-left">
                 <li><a href="{% url 'search' %}">Search</a></li>
+                <li><a href="{% url 'mailer' %}">Mailer</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
@@ -53,7 +54,7 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             {% block side_block %}
-                {% get_category_list category%}
+                {% get_category_list category %}
             {% endblock %}
         </div>
 

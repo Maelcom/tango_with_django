@@ -16,4 +16,5 @@ urlpatterns = patterns('',
         url(r'^restricted/$', views.restricted, name='restricted'),
         url(r'^change/$', password_change, {'post_change_redirect': 'index'}, name='change'),
         url(r'^search/$', views.search, name='search'),
+        url(r'^mailer/$', views.mailer, name='mailer'),
 )

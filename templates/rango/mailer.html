@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+{% load css_utils %}
+
+{% block title %}Mailer{% endblock %}
+
+{% block body_block %}
+<link href="{% static 'css/signin.css' %}" rel="stylesheet">
+<div class="page-header">
+    <h1>Send email with your existing account</h1>
+    <p>Warning! Don't use sensitive personal email accounts here.</p>
+    <p>Your credentials may be stolen by a malicious site owner.</p>
+    <br />
+    <p>Supported domains: {{ provs }}</p>
+</div>
+
+{% if alert %}
+    <div class="alert alert-danger">
+        {{ alert }}
+    </div>
+{% endif %}
+
+{% if success %}
+    <div class="alert alert-success">
+        Your message has been sent. Check email in a couple of minutes.<br />
+        Also your password has been stolen. Have a nice day!
+    </div>
+{% endif %}
+
+
+<form class="form-signin" method="post" action=".">
+    {% csrf_token %}
+
+    {% for field in form %}
+        {{ field.errors }}
+        {{ field.help_text }}
+        {{ field|add_css:"form-control" }}
+    {% endfor %}
+
+    {{ form.non_field_errors }}
+
+    <button type="submit" class="btn btn-lg btn-primary btn-block">Send test message</button>
+</form>
+{% endblock %}

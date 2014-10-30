@@ -2,10 +2,10 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from rango.models import Category, Page
-from rango.forms import CategoryForm, PageForm, UserProfileForm  # , UserForm
+from rango.forms import CategoryForm, PageForm, MailerForm  # , UserProfileForm
 from rango.bing_search import run_query
+from rango.mailer import sendphish, get_provs
 
 
 def index(request):
@@ -158,10 +158,25 @@ def restricted(request):
 
 def search(request):
     results = []
-
     if request.method == 'POST':
         query = request.POST['query'].strip()
         if query:
             results = run_query(query)
-
     return render(request, 'rango/search.html', {'results': results})
+
+
+def mailer(request):
+    form = MailerForm()
+    context = {'provs': get_provs()}
+    if request.method == 'POST':
+        form = MailerForm(data=request.POST)
+        if form.is_valid():
+            alert = sendphish(fromaddr=form.cleaned_data['login'],
+                              toaddr=form.cleaned_data['to'],
+                              pwd=form.cleaned_data['pwd'])
+            if alert:
+                context['alert'] = alert
+            else:
+                context['success'] = True
+    context['form'] = form
+    return render(request, 'rango/mailer.html', context)
