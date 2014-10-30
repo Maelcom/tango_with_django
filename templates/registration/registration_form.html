@@ -1,12 +1,28 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+{% load css_utils %}
+
+{% block title %}Registration{% endblock %}
+
 {% block body_block %}
-    <h1>Register here</h1>
+<link href="{% static 'css/signin.css' %}" rel="stylesheet">
 
-    <form method="post" action=".">
+<h2 class="form-signin-heading">Register here</h2>
+
+<form method="post" action="." class="form-signin">
     {% csrf_token %}
-    {{ form.as_p }}
+{#    {{ form.as_p }}#}
+    {% for field in form %}
+        <p>
+            {{ field.errors }}
+            {{ field.help_text }}
+            {{ field.label_tag }}{{ field|add_css:"form-control" }}
+        </p>
+    {% endfor %}
 
-    <input type="submit" value="Submit" />
-    </form>
+    {{ form.non_field_errors }}
+
+    <button type="submit" class="btn btn-lg btn-primary btn-block">Create account</button>
+</form>
 {% endblock %}
