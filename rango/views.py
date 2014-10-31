@@ -1,9 +1,8 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from rango.models import Category, Page
-from rango.forms import CategoryForm, PageForm, MailerForm, UserProfileForm
+from rango.forms import CategoryForm, PageForm, MailerForm
 from registration.backends.simple.views import RegistrationView
 from rango.bing_search import run_query
 from rango.mailer import sendphish, get_provs
@@ -50,6 +49,7 @@ def category_view(request, category_name_slug):
         context_dict['category_name'] = category_name_slug.replace('-', ' ').title()
 
     return render(request, 'rango/category.html', context_dict)
+
 
 @login_required
 def add_category(request):
@@ -125,12 +125,6 @@ def add_page(request, category_name_slug):
 #                               {'user_form': user_form,
 #                                'profile_form': profile_form,})
 #
-
-
-@login_required
-def user_logout(request):
-    logout(request)
-    return redirect('index')
 
 
 @login_required
