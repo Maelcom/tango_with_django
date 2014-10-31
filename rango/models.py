@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from utils.queryset import GetOrNoneManager
+from django.db.models.signals import post_save
 
 
 class BaseModel(models.Model):
@@ -42,3 +43,10 @@ class UserProfile(BaseModel):
 
     def __unicode__(self):
         return self.user.username
+
+    @staticmethod
+    def create_profile(**kwargs):
+        if kwargs.get('created'):
+            UserProfile(user=kwargs['instance']).save()
+
+post_save.connect(UserProfile.create_profile, sender=User, weak=False)

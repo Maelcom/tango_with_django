@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from rango.models import Category, Page
-from rango.forms import CategoryForm, PageForm, MailerForm  # , UserProfileForm
+from rango.forms import CategoryForm, PageForm, MailerForm, UserProfileForm
+from registration.backends.simple.views import RegistrationView
 from rango.bing_search import run_query
 from rango.mailer import sendphish, get_provs
 
@@ -42,7 +43,7 @@ def category_view(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
         context_dict['category_name'] = category.name
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=category).order_by('-views')
         context_dict['category'] = category
         context_dict['pages'] = pages
     except Category.DoesNotExist:
@@ -124,25 +125,6 @@ def add_page(request, category_name_slug):
 #                               {'user_form': user_form,
 #                                'profile_form': profile_form,})
 #
-#
-# def user_login(request):
-#     if request.method == 'POST':
-#         username = request.POST['username']
-#         password = request.POST['password']
-#
-#         user = authenticate(username=username, password=password)
-#
-#         if user:
-#             if user.is_active:
-#                 login(request, user)
-#                 return redirect('index')
-#             else:
-#                 return HttpResponse("Your Rango account is disabled.")
-#         else:
-#             print "Invalid login details: {0}, {1}".format(username, password)
-#             return HttpResponse("Invalid login details supplied.")
-#     else:
-#         return render(request, 'rango/login.html', {})
 
 
 @login_required
@@ -180,3 +162,20 @@ def mailer(request):
                 context['success'] = True
     context['form'] = form
     return render(request, 'rango/mailer.html', context)
+
+
+def track_url(request):
+    if request.method == 'GET':
+        page_id = request.GET.get('page_id')
+        if page_id:
+            page = Page.objects.get(id=page_id)
+            page.views += 1
+            page.save()
+            return redirect(page.url)
+        else:
+            return redirect('index')
+
+
+class RangoRegistrationView(RegistrationView):
+    def get_success_url(self, request, user):
+        return '/rango/'
