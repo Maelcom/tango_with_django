@@ -61,3 +61,6 @@ target/
 
 # File with API keys
 apikeys.py
+
+# Why the hell media is not ignored by default?
+media/

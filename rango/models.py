@@ -45,8 +45,8 @@ class UserProfile(BaseModel):
         return self.user.username
 
     @staticmethod
-    def create_profile(**kwargs):
-        if kwargs.get('created'):
-            UserProfile(user=kwargs['instance']).save()
+    def create_profile(sender, instance, created, **kwargs):
+        if created:
+            UserProfile(user=instance).save()
 
 post_save.connect(UserProfile.create_profile, sender=User, weak=False)

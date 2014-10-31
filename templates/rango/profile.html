@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}Your profile{% endblock %}
+
+{% block content %}
+<form enctype="multipart/form-data" id="profile_form" method="post" action=".">
+    {% csrf_token %}
+
+    {% if form.instance.picture %}
+    <img src="{% static form.instance.picture.url %}" />
+    {% else %}
+    <img src="{% static 'img/sin.jpg' %}" />
+    {% endif %}
+    {% for field in form %}
+        <p>
+            {{ field.errors }}
+            {{ field.help_text }}
+            {{ field.label_tag }}{{ field }}
+        </p>
+    {% endfor %}
+
+    {{ form.non_field_errors }}
+
+    <button type="submit" class="btn btn-lg btn-primary">Save</button>
+</form>
+{% endblock %}

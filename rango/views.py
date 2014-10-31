@@ -1,8 +1,9 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from rango.models import Category, Page
-from rango.forms import CategoryForm, PageForm, MailerForm
+from django.views.generic.edit import UpdateView
+from rango.models import Category, Page, UserProfile
+from rango.forms import CategoryForm, PageForm, MailerForm, UserProfileForm
 from registration.backends.simple.views import RegistrationView
 from rango.bing_search import run_query
 from rango.mailer import sendphish, get_provs
@@ -173,3 +174,14 @@ def track_url(request):
 class RangoRegistrationView(RegistrationView):
     def get_success_url(self, request, user):
         return '/rango/'
+
+
+class ProfileUpdate(UpdateView):
+    model = UserProfile
+    fields = ('picture', 'website')
+    template_name_suffix = ""
+    template_name = 'rango/profile.html'
+    success_url = '.'
+
+    def get_object(self, queryset=None):
+        return UserProfile.objects.get(user=self.request.user)

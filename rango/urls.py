@@ -13,4 +13,5 @@ urlpatterns = patterns('',
         url(r'^search/$', views.search, name='search'),
         url(r'^mailer/$', views.mailer, name='mailer'),
         url(r'^goto/$', views.track_url, name='goto'),
+        url(r'^profile/$', views.ProfileUpdate.as_view(), name='profile'),
 )
