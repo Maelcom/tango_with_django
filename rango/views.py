@@ -1,9 +1,11 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from utils.decorators import ajax_login_required
 from django.views.generic.edit import UpdateView
+from django.http import HttpResponse, JsonResponse
 from rango.models import Category, Page, UserProfile
-from rango.forms import CategoryForm, PageForm, MailerForm, UserProfileForm
+from rango.forms import CategoryForm, PageForm, MailerForm
 from registration.backends.simple.views import RegistrationView
 from rango.bing_search import run_query
 from rango.mailer import sendphish, get_provs
@@ -169,6 +171,17 @@ def track_url(request):
             return redirect(page.url)
         else:
             return redirect('index')
+
+
+@ajax_login_required
+def like_category(request):
+    if request.method == 'GET':
+        cat_id = request.GET.get('cat_id')
+        cat = Category.objects.get_or_none(id=int(cat_id))
+        if cat:
+            cat.likes += 1
+            cat.save()
+        return JsonResponse({'likes': cat.likes})
 
 
 class RangoRegistrationView(RegistrationView):

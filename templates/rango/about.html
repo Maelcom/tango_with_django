@@ -15,6 +15,18 @@ Go back to <a href="{% url 'index' %}">"Rango"</a> page.
         this!</a></p>
 {% endif %}
 
+<button onclick="alert('Simple inline JS');">
+    Run JS
+</button>
+
+<button id="about-btn">
+    Run JQuery
+</button>
+
+<p id="msg">Victim of JS trickery</p>
+
+<p>Another victim</p>
+
 <p>Here is a pic for <strong>About</strong> page.</p>
 <img src="{% static file_name %}" alt={{ file_name }} />
 {% endblock %}
