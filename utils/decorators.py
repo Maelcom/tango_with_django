@@ -5,6 +5,7 @@ from urlparse import urlparse
 from django.contrib.auth import REDIRECT_FIELD_NAME
 
 
+# todo: Pop-up login modal window instead of full redirect
 def ajax_login_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME):
     @wraps(function)
     def _wrapped_view(request, *args, **kwargs):

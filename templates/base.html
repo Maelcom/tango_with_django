@@ -57,7 +57,11 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             {% block side_block %}
-                {% get_category_list category %}
+                <input class="search-query" type="text" name="suggestion" id="suggestion"
+                        placeholder="search in categories.." />
+                <div id="suggested_cats"></div>
+                <hr>
+                <div id="cats">{% get_category_list category %}</div>
             {% endblock %}
         </div>
 

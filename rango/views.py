@@ -40,6 +40,7 @@ def about(request):
     return render(request, 'rango/about.html', context_dict)
 
 
+# Category/Page views (TODO: split into separate file)
 def category_view(request, category_name_slug):
     context_dict = {}
     try:
@@ -182,6 +183,22 @@ def like_category(request):
             cat.likes += 1
             cat.save()
         return JsonResponse({'likes': cat.likes})
+
+
+# Accessory function for 'suggest_category' view
+def get_cat_list(q='', max_results=0):
+    cats = None
+    if q:
+        cats = Category.objects.filter(name__istartswith=q)
+        if max_results > 0:
+            cats = cats[:max_results]
+    return cats
+
+
+def suggest_category(request):
+    if request.method == 'GET':
+        q = request.GET.get('q')
+        return render(request, 'rango/cats.html', {'cats': get_cat_list(q)})
 
 
 class RangoRegistrationView(RegistrationView):

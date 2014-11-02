@@ -10,12 +10,23 @@ $(document).ready(function() {
             console.log(jqXHR);
             if (data.likes) {
                 $('#like-count').html(data.likes);
+                $('#like').prop('disabled', true);
             }
             else if (data.redirect) {
-                console.log('redirecting to login');
                 window.location.replace(data.redirect);
             }
 
+        });
+    });
+    $('#suggestion').keyup(function() {
+        var q = $(this).val();
+        $.get('/rango/suggest_category/', {q: q}, function (data, textStatus, jqXHR) {
+            console.log('ajax response contents:');
+            console.log(data);
+            console.log(jqXHR);
+            if (data) {
+                $('#suggested_cats').html(data);
+            }
         });
     });
 });
