@@ -3,9 +3,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
-from utils.decorators import ajax_login_required, popup_login_required
+from utils.decorators import ajax_login_required
 from django.views.generic.edit import UpdateView
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm, MailerForm
 from registration.backends.simple.views import RegistrationView
@@ -186,7 +186,7 @@ def track_url(request):
             return redirect('index')
 
 
-@popup_login_required
+@ajax_login_required
 def like_category(request):
     if request.method == 'GET':
         cat_id = request.GET.get('cat_id')
