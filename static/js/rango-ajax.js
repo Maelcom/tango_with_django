@@ -1,7 +1,7 @@
 $overlay = $('<div id="overlay"></div>');
 $modal = $('<div id="modal"></div>');
 $modal_content = $('<div id="modal_content"></div>');
-$close = $('<a id="close">Close</a>');
+$close = $('<a id="close" href="#">Close</a>');
 
 $modal.append($close, $modal_content);
 

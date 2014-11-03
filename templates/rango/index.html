@@ -7,12 +7,12 @@
 {% block content %}
 
 <div class="page-header hero-unit">
+    <h1>Привет,
     {% if user.is_authenticated %}
-        <h1>Hello, {{ user.username }}!</h1>
+        <a href="{% url 'profile' %}">{{ user.username }}</a>!
     {% else %}
-        <h1>Привет, <a href="{% url 'auth_login' %}">%username%</a>! Мы скучали
-            по тебе.</h1>
-    {% endif %}
+        <a href="{% url 'auth_login' %}">%username%</a>!
+    {% endif %}Мы скучали по тебе.</h1>
 </div>
 
 <div class="row placeholders">
