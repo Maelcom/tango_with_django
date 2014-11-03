@@ -1,0 +1,23 @@
+{% load css_utils %}
+{% load staticfiles %}
+<link href="{% static 'css/signin.css' %}" rel="stylesheet">
+
+<h2 class="form-signin-heading">Please login first. It's quick!</h2>
+
+<form id="signin_form" method="post" action="{% url 'ajax_login' %}" class="form-signin">
+    {% csrf_token %}
+
+    {% for field in form %}
+        <p>
+            {{ field.errors }}
+            {{ field.help_text }}
+            {{ field.label_tag }}{{ field|add_css:"form-control" }}
+        </p>
+    {% endfor %}
+
+    {{ form.non_field_errors }}
+
+    <button id="login_button" type="button" class="btn btn-lg btn-primary btn-block">Log in</button>
+</form>
+
+<p>Not a member? <a href="{% url 'registration_register' %}">Register now!</a></p>

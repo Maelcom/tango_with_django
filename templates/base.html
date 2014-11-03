@@ -56,13 +56,11 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-            {% block side_block %}
-                <input class="search-query" type="text" name="suggestion" id="suggestion"
-                        placeholder="search in categories.." />
-                <div id="suggested_cats"></div>
-                <hr>
-                <div id="cats">{% get_category_list category %}</div>
-            {% endblock %}
+            <input class="search-query" type="text" name="suggestion" id="suggestion"
+                    placeholder="search in categories.." />
+            <div id="suggested_cats"></div>
+            <hr>
+            <div id="cats">{% get_category_list category %}</div>
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">

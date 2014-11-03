@@ -16,4 +16,5 @@ urlpatterns = patterns('',
         url(r'^mailer/$', views.mailer, name='mailer'),
         url(r'^goto/$', views.track_url, name='goto'),
         url(r'^profile/$', views.ProfileUpdate.as_view(), name='profile'),
+        url(r'^ajax_login/$', views.ajax_login, name='ajax_login'),
 )

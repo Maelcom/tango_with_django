@@ -1,7 +1,9 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from utils.decorators import ajax_login_required
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login
+from utils.decorators import ajax_login_required, popup_login_required
 from django.views.generic.edit import UpdateView
 from django.http import HttpResponse, JsonResponse
 from rango.models import Category, Page, UserProfile
@@ -131,6 +133,16 @@ def add_page(request, category_name_slug):
 #
 
 
+def ajax_login(request):
+    form = AuthenticationForm()
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            return JsonResponse({'login_success': 'ok'})
+    return render(request, 'rango/ajax_login.html', {'form': form})
+
+
 @login_required
 def restricted(request):
     return render(request, 'rango/restricted.html')
@@ -174,7 +186,7 @@ def track_url(request):
             return redirect('index')
 
 
-@ajax_login_required
+@popup_login_required
 def like_category(request):
     if request.method == 'GET':
         cat_id = request.GET.get('cat_id')

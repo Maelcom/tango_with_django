@@ -4,6 +4,7 @@
 
 {% block content %}
 {% if category %}
+
     <h1>Contents of category {{ category.name }}:</h1>
     {% if pages %}
     <ul>
@@ -23,6 +24,7 @@
         <button id="like" cat_id="{{ category.id }}" class="btn btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> Liek!</button>
         <span id="like-count">{{ category.likes }}</span> user{{ category.likes|pluralize }} liked this!
     </div>
+    <div id="exp-modal"></div>
 {% else %}
     <strong>The specified category {{ category_name }} doesn't exist!</strong>
 {% endif %}

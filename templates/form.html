@@ -12,7 +12,7 @@
 
 <h2 class="form-signin-heading">{% block form_heading %}{% endblock %}</h2>
 
-<form id="change_form" method="post" action="." class="form-signin">
+<form id="signin_form" method="post" action={% block action %}"."{% endblock %} class="form-signin">
     {% csrf_token %}
 
     {% for field in form %}
