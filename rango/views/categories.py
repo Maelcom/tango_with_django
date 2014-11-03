@@ -96,3 +96,8 @@ def suggest_category(request):
     if request.method == 'GET':
         q = request.GET.get('q')
         return render(request, 'rango/cats.html', {'cats': get_cat_list(q)})
+
+
+@login_required
+def restricted(request):
+    return render(request, 'rango/restricted.html')

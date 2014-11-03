@@ -31,8 +31,3 @@ class ProfileUpdate(UpdateView):
 
     def get_object(self, queryset=None):
         return UserProfile.objects.get(user=self.request.user)
-
-
-@login_required
-def restricted(request):
-    return render(request, 'rango/restricted.html')
