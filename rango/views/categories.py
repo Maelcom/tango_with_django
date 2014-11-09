@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -65,6 +66,9 @@ def track_url(request):
         if page_id:
             page = Page.objects.get(id=page_id)
             page.views += 1
+            page.last_visit = timezone.now()
+            if not page.first_visit:
+                page.first_visit = page.last_visit
             page.save()
             return redirect(page.url)
         else:

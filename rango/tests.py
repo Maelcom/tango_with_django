@@ -1,6 +1,7 @@
 from django.test import TestCase
-from rango.models import Category
+from rango.models import Category, Page
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 
 
 class CategoryModelTests(TestCase):
@@ -22,6 +23,49 @@ class CategoryModelTests(TestCase):
         cat = Category(name='Random Category String')
         cat.save()
         self.assertEqual(cat.slug, "random-category-string")
+
+
+class PageModelTests(TestCase):
+    def setUp(self):
+        cat = Category(name='Testing Page model')
+        cat.save()
+
+        page = Page(category=cat, title="Test page", url="http://test.tt.st")
+        page.save()
+
+    def test_visit_times_are_not_in_future(self):
+        """
+        Check that first_visit and last_visit are not set to future
+        """
+        page = Page.objects.get(title="Test page")
+
+        page_track_url = "{0}?page_id={1}".format(reverse('goto'), page.id)
+        self.client.get(page_track_url)
+
+        page = Page.objects.get(title="Test page")
+        now = timezone.now()
+
+        self.assertLessEqual(page.last_visit, now)
+        self.assertLessEqual(page.first_visit, now)
+
+    def test_last_visit_is_not_before_first_after_two_views(self):
+        """
+        Check that last_visit >= first_visit
+        """
+        page = Page.objects.get(title="Test page")
+        page_track_url = "{0}?page_id={1}".format(reverse('goto'), page.id)
+
+        # First view of Page (have to refresh Page instance from DB)
+        self.client.get(page_track_url)
+        page = Page.objects.get(id=page.id)
+
+        self.assertLessEqual(page.first_visit, page.last_visit)
+
+        # Second view of Page (have to refresh Page instance from DB)
+        self.client.get(page_track_url)
+        page = Page.objects.get(id=page.id)
+        self.assertLessEqual(page.first_visit, page.last_visit)
+
 
 
 # Helper method for Category tests

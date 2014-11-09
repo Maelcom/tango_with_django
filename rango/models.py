@@ -33,6 +33,8 @@ class Page(BaseModel):
     title = models.CharField(max_length=128)
     url = models.URLField()
     views = models.IntegerField(default=0)
+    first_visit = models.DateTimeField(null=True, blank=True)
+    last_visit = models.DateTimeField(null=True, blank=True)
 
     def __unicode__(self):
         return self.title
