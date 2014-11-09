@@ -20,6 +20,8 @@ class Category(BaseModel):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
+        if self.views < 0:
+            self.views = 0
         super(Category, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -48,5 +50,5 @@ class UserProfile(BaseModel):
     def create_profile(sender, instance, created, **kwargs):
         if created:
             UserProfile(user=instance).save()
-
+# Hook to create UserProfile when new User is created
 post_save.connect(UserProfile.create_profile, sender=User, weak=False)
