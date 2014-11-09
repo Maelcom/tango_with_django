@@ -1,10 +1,12 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
+from django.shortcuts import redirect
 from rango import views
 
 
 urlpatterns = patterns('',
+    url(r'^$', lambda r: redirect('index')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^rango/', include('rango.urls')),
     url(r'^accounts/register/$', views.RangoRegistrationView.as_view(),
