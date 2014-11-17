@@ -21,7 +21,7 @@
     {% endif %}
 
     <div id="like-block">
-        <button id="like" cat_id="{{ category.id }}" class="btn btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> Liek!</button>
+        <button class="btn btn-primary login-required" id="like" href="/rango/like_category/" cat_id="{{ category.id }}"><span class="glyphicon glyphicon-thumbs-up"></span> Liek!</button>
         <span id="like-count">{{ category.likes }}</span> user{{ category.likes|pluralize }} liked this!
     </div>
     <div id="exp-modal"></div>

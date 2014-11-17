@@ -32,15 +32,28 @@ $(document).ready(function() {
     $("#about-btn").click( function() {
         $('#msg').append('o');
     });
-    $('#like').click(function() {
-        var cat_id = $(this).attr('cat_id');
-        $.get('/rango/like_category/', {cat_id: cat_id}, function (data) {
-            if (data.likes) {
-                $('#like-count').html(data.likes);
-                $('#like').prop('disabled', true);
-            }
-            else if (data.login_required) {
-                ajax_login(data.login_required)
+
+    $('.login-required').click(function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        var obj = {};
+        $(this.attributes).each(function() {
+            obj[this.nodeName] = this.nodeValue;
+        });
+
+        $.get(url, obj, function (data) {
+            console.log(data);
+            if (typeof data == "object") {
+                if (data.likes) {
+                    $('#like-count').html(data.likes);
+                    $('#like').prop('disabled', true);
+                }
+                else if (data.login_required) {
+                    ajax_login(data.login_required)
+                }
+            } else {
+                console.log('js allows this redirect');
+                window.location.replace(url);
             }
         });
     });

@@ -20,7 +20,7 @@ def category_view(request, category_name_slug):
 
     return render(request, 'rango/category.html', context_dict)
 
-
+@ajax_login_required
 @login_required
 def add_category(request):
     if request.method == 'POST':
