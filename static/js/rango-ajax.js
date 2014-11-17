@@ -5,21 +5,10 @@ $close = $('<a id="close" href="#">Close</a>');
 
 $modal.append($close, $modal_content);
 
-$(document).ready(function() {
-    $("#about-btn").click( function() {
-        $('#msg').append('o');
-    });
-    $('#like').click(function() {
-        var cat_id = $(this).attr('cat_id');
-        $.get('/rango/like_category/', {cat_id: cat_id}, function (data, textStatus, jqXHR) {
-            if (data.likes) {
-                $('#like-count').html(data.likes);
-                $('#like').prop('disabled', true);
-            }
-            else if (data.login_required) {
-                $('body').append($overlay, $modal);
+function ajax_login(login_url) {
+    $('body').append($overlay, $modal);
                 var modal_content = $('#modal_content');
-                modal_content.load(data.login_required, function() {
+                modal_content.load(login_url, function() {
                     modal_content.on('click', '#login_button', function(event) {
                         event.preventDefault();
                         var form = $('#signin_form');
@@ -37,6 +26,21 @@ $(document).ready(function() {
                         $('#overlay, #modal').remove();
                     });
                 });
+}
+
+$(document).ready(function() {
+    $("#about-btn").click( function() {
+        $('#msg').append('o');
+    });
+    $('#like').click(function() {
+        var cat_id = $(this).attr('cat_id');
+        $.get('/rango/like_category/', {cat_id: cat_id}, function (data) {
+            if (data.likes) {
+                $('#like-count').html(data.likes);
+                $('#like').prop('disabled', true);
+            }
+            else if (data.login_required) {
+                ajax_login(data.login_required)
             }
         });
     });
